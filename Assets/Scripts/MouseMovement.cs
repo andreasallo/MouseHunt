@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+
 
 public class MouseMovement : MonoBehaviour
 {
@@ -13,13 +15,23 @@ public class MouseMovement : MonoBehaviour
     [Header("Bounce Settings")]
     public float bounceAngle = 45f;
 
+    [Header("Audio")]
+    public AudioClip fallSound;
+    public AudioSource musicSource;
+
     private Vector3 moveDirection;
     private GameManager gameManager;
+    private AudioSource audioSource;
 
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        audioSource = GetComponent<AudioSource>();
         ChooseRandomDirection();
+        if (musicSource != null)
+        {
+            musicSource.volume = 0.25f;
+        }
     }
 
     void Update()
@@ -82,6 +94,7 @@ public class MouseMovement : MonoBehaviour
         }
     }
 
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Hole"))
@@ -93,7 +106,26 @@ public class MouseMovement : MonoBehaviour
                 gameManager.AddPoint();
             }
 
-            Destroy(gameObject);
+            StartCoroutine(DuckMusic());
+
+            if (fallSound != null)
+            {
+                audioSource.PlayOneShot(fallSound, 1f);
+            }
+
+            Destroy(gameObject, 1f);
+        }
+    }
+
+    IEnumerator DuckMusic()
+    {
+        if (musicSource != null)
+        {
+            musicSource.volume = 0.08f; 
+
+            yield return new WaitForSeconds(1f);
+
+            musicSource.volume = 0.25f; 
         }
     }
 
