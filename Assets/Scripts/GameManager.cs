@@ -1,0 +1,12 @@
+using UnityEngine;
+
+public class GameManager : MonoBehaviour
+{
+    public int score = 0;
+
+    public void AddPoint()
+    {
+        score++;
+        Debug.Log("Score: " + score);
+    }
+}
