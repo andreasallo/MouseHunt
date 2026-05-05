@@ -6,11 +6,12 @@ TagManager:
   tags:
   - BlendPlane0
   - BlendPlane1
+  - Hole
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Obstacle
   - Water
   - UI
   - BlendPlane0
