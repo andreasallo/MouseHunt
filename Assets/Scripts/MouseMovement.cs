@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 
-
 public class MouseMovement : MonoBehaviour
 {
     [Header("Movement")]
@@ -15,6 +14,11 @@ public class MouseMovement : MonoBehaviour
     [Header("Bounce Settings")]
     public float bounceAngle = 45f;
 
+    [Header("Fall Animation")]
+    public float fallDuration = 1f;
+    public float spinSpeed = 720f;
+    public float fallDistance = 1f;
+
     [Header("Audio")]
     public AudioClip fallSound;
     public AudioSource musicSource;
@@ -22,12 +26,14 @@ public class MouseMovement : MonoBehaviour
     private Vector3 moveDirection;
     private GameManager gameManager;
     private AudioSource audioSource;
+    private bool isFalling = false;
 
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
         audioSource = GetComponent<AudioSource>();
         ChooseRandomDirection();
+
         if (musicSource != null)
         {
             musicSource.volume = 0.25f;
@@ -36,6 +42,11 @@ public class MouseMovement : MonoBehaviour
 
     void Update()
     {
+        if (isFalling)
+        {
+            return;
+        }
+
         CheckForObstacle();
         MoveMouse();
     }
@@ -94,9 +105,13 @@ public class MouseMovement : MonoBehaviour
         }
     }
 
-
     private void OnTriggerEnter(Collider other)
     {
+        if (isFalling)
+        {
+            return;
+        }
+
         if (other.CompareTag("Hole"))
         {
             Debug.Log("Mouse fell into the hole!");
@@ -106,26 +121,63 @@ public class MouseMovement : MonoBehaviour
                 gameManager.AddPoint();
             }
 
-            StartCoroutine(DuckMusic());
-
-            if (fallSound != null)
-            {
-                audioSource.PlayOneShot(fallSound, 1f);
-            }
-
-            Destroy(gameObject, 1f);
+            StartCoroutine(FallIntoHole(other.transform.position));
         }
+    }
+
+    IEnumerator FallIntoHole(Vector3 holePosition)
+    {
+        isFalling = true;
+
+        Collider mouseCollider = GetComponent<Collider>();
+        if (mouseCollider != null)
+        {
+            mouseCollider.enabled = false;
+        }
+
+        if (musicSource != null)
+        {
+            StartCoroutine(DuckMusic());
+        }
+
+        if (fallSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(fallSound, 1f);
+        }
+
+        Vector3 startPosition = transform.position;
+        Vector3 endPosition = new Vector3(holePosition.x, startPosition.y - fallDistance, holePosition.z);
+
+        Vector3 startScale = transform.localScale;
+        Vector3 endScale = Vector3.zero;
+
+        float elapsedTime = 0f;
+
+        while (elapsedTime < fallDuration)
+        {
+            float t = elapsedTime / fallDuration;
+
+            transform.position = Vector3.Lerp(startPosition, endPosition, t);
+            transform.localScale = Vector3.Lerp(startScale, endScale, t);
+
+            transform.Rotate(Vector3.up, spinSpeed * Time.deltaTime, Space.World);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        Destroy(gameObject);
     }
 
     IEnumerator DuckMusic()
     {
         if (musicSource != null)
         {
-            musicSource.volume = 0.08f; 
+            musicSource.volume = 0.08f;
 
             yield return new WaitForSeconds(1f);
 
-            musicSource.volume = 0.25f; 
+            musicSource.volume = 0.25f;
         }
     }
 
