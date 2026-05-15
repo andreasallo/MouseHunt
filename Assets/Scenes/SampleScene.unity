@@ -3181,8 +3181,8 @@ MonoBehaviour:
   colliderHeight: 3
   colliderThickness: 1
   obstacleLayerName: Obstacle
-  clearLineWhenStopped: 0
-  keyboardTestMode: 0
+  clearOldLineWhenStartingNewLine: 1
+  keyboardTestMode: 1
   testMoveSpeed: 20
 --- !u!1001 &980598508
 PrefabInstance:
@@ -7576,7 +7576,7 @@ MonoBehaviour:
   colliderHeight: 3
   colliderThickness: 1
   obstacleLayerName: Obstacle
-  clearLineWhenStopped: 0
+  clearOldLineWhenStartingNewLine: 1
   keyboardTestMode: 1
   testMoveSpeed: 20
 --- !u!120 &2039963498

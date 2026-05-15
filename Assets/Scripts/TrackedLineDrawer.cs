@@ -6,52 +6,49 @@ using UnityEngine.InputSystem;
 public class TrackedLineDrawer : MonoBehaviour
 {
     [Header("Drawing")]
-    [SerializeField] private float maxLineLength = 15f;
-    [SerializeField] private float minPointDistance = 0.05f;
+    [SerializeField] private float maxLineLength = 40f;
+    [SerializeField] private float minPointDistance = 0.03f;
     [SerializeField] private float lineHeightOffset = 0.15f;
 
     [Header("Upside Down Detection")]
     [SerializeField] private float upsideDownThreshold = 0.7f;
 
     [Header("Visuals")]
-    [SerializeField] private float lineWidth = 0.2f;
+    [SerializeField] private float lineWidth = 0.8f;
     [SerializeField] private Material lineMaterial;
 
     [Header("Physical Barrier")]
-    [SerializeField] private float colliderHeight = 1f;
-    [SerializeField] private float colliderThickness = 0.5f;
+    [SerializeField] private float colliderHeight = 1.5f;
+    [SerializeField] private float colliderThickness = 0.8f;
     [SerializeField] private string obstacleLayerName = "Obstacle";
 
     [Header("Behaviour")]
-    [SerializeField] private bool clearLineWhenStopped = false;
+    [SerializeField] private bool clearOldLineWhenStartingNewLine = true;
 
     [Header("Home Testing")]
     [SerializeField] private bool keyboardTestMode = false;
-    [SerializeField] private float testMoveSpeed = 10f;
+    [SerializeField] private float testMoveSpeed = 20f;
 
     private LineRenderer lineRenderer;
     private readonly List<Vector3> points = new List<Vector3>();
     private readonly List<GameObject> colliders = new List<GameObject>();
 
-    private bool wasDrawing;
+    private bool wasDrawing = false;
 
     private void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
 
         lineRenderer.positionCount = 0;
-        lineRenderer.startWidth = lineWidth;
-        lineRenderer.endWidth = lineWidth;
         lineRenderer.useWorldSpace = true;
 
-        if (lineMaterial != null)
-        {
-            lineRenderer.material = lineMaterial;
-        }
+        ApplyLineSettings();
     }
 
     private void Update()
     {
+        ApplyLineSettings();
+
         if (keyboardTestMode)
         {
             MoveWithKeyboard();
@@ -61,20 +58,45 @@ public class TrackedLineDrawer : MonoBehaviour
             ? Keyboard.current != null && Keyboard.current.spaceKey.isPressed
             : IsDeviceUpsideDown();
 
+        // When drawing starts again, reset old line instead of connecting from the old position.
+        if (isDrawing && !wasDrawing)
+        {
+            StartNewLine();
+        }
+
         if (isDrawing)
         {
             DrawPoint();
-            wasDrawing = true;
         }
-        else if (wasDrawing)
-        {
-            wasDrawing = false;
 
-            if (clearLineWhenStopped)
-            {
-                ClearLine();
-            }
+        wasDrawing = isDrawing;
+    }
+
+    private void ApplyLineSettings()
+    {
+        lineRenderer.startWidth = lineWidth;
+        lineRenderer.endWidth = lineWidth;
+        lineRenderer.widthMultiplier = 1f;
+        lineRenderer.useWorldSpace = true;
+
+        if (lineMaterial != null)
+        {
+            lineRenderer.material = lineMaterial;
         }
+    }
+
+    private void StartNewLine()
+    {
+        if (clearOldLineWhenStartingNewLine)
+        {
+            ClearLine();
+        }
+
+        Vector3 startPoint = transform.position;
+        startPoint.y += lineHeightOffset;
+
+        points.Add(startPoint);
+        UpdateLine();
     }
 
     private void MoveWithKeyboard()
@@ -113,6 +135,8 @@ public class TrackedLineDrawer : MonoBehaviour
 
     private bool IsDeviceUpsideDown()
     {
+        // Correct tracker rotation:
+        // Drawing starts when the tracker's local forward axis points downward.
         return Vector3.Dot(transform.forward, Vector3.down) > upsideDownThreshold;
     }
 
@@ -128,14 +152,23 @@ public class TrackedLineDrawer : MonoBehaviour
             return;
         }
 
-        float distanceFromLastPoint = Vector3.Distance(points[points.Count - 1], currentPoint);
+        Vector3 lastPoint = points[points.Count - 1];
+        float distanceFromLastPoint = Vector3.Distance(lastPoint, currentPoint);
 
         if (distanceFromLastPoint < minPointDistance)
         {
             return;
         }
 
-        points.Add(currentPoint);
+        // This fills gaps if the tracker moves quickly between frames.
+        int pointsToAdd = Mathf.FloorToInt(distanceFromLastPoint / minPointDistance);
+
+        for (int i = 1; i <= pointsToAdd; i++)
+        {
+            float t = i / (float)pointsToAdd;
+            Vector3 interpolatedPoint = Vector3.Lerp(lastPoint, currentPoint, t);
+            points.Add(interpolatedPoint);
+        }
 
         TrimLineToMaxLength();
         UpdateLine();
@@ -164,9 +197,6 @@ public class TrackedLineDrawer : MonoBehaviour
 
     private void UpdateLine()
     {
-        lineRenderer.startWidth = lineWidth;
-        lineRenderer.endWidth = lineWidth;
-
         lineRenderer.positionCount = points.Count;
         lineRenderer.SetPositions(points.ToArray());
     }
@@ -195,8 +225,8 @@ public class TrackedLineDrawer : MonoBehaviour
 
         GameObject segment = new GameObject("Line Collider Segment");
 
-        // Do NOT parent this to the moving player.
-        // It should stay fixed in world space.
+        // Do not parent this to the moving tracker.
+        // The collider must stay fixed in world space.
         segment.transform.position = middle;
         segment.transform.rotation = Quaternion.LookRotation(direction);
 
