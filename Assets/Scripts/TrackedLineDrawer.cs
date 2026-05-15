@@ -113,7 +113,7 @@ public class TrackedLineDrawer : MonoBehaviour
 
     private bool IsDeviceUpsideDown()
     {
-        return Vector3.Dot(transform.up, Vector3.down) > upsideDownThreshold;
+        return Vector3.Dot(transform.forward, Vector3.down) > upsideDownThreshold;
     }
 
     private void DrawPoint()
