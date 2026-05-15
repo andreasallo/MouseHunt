@@ -3182,7 +3182,7 @@ MonoBehaviour:
   colliderThickness: 1
   obstacleLayerName: Obstacle
   clearLineWhenStopped: 0
-  keyboardTestMode: 1
+  keyboardTestMode: 0
   testMoveSpeed: 20
 --- !u!1001 &980598508
 PrefabInstance:
@@ -7567,18 +7567,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4733e3d638f0b4f30b6d8e2cad6ed6e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxLineLength: 2
-  minPointDistance: 0.08
-  lineHeightOffset: 0.03
+  maxLineLength: 40
+  minPointDistance: 0.02
+  lineHeightOffset: 0.15
   upsideDownThreshold: 0.7
-  lineWidth: 0.08
-  lineMaterial: {fileID: 0}
-  colliderHeight: 0.4
-  colliderThickness: 0.12
+  lineWidth: 1
+  lineMaterial: {fileID: 2100000, guid: 10edb8367cef642049c7cb3b0ed5387d, type: 2}
+  colliderHeight: 3
+  colliderThickness: 1
   obstacleLayerName: Obstacle
   clearLineWhenStopped: 0
-  keyboardTestMode: 0
-  testMoveSpeed: 5
+  keyboardTestMode: 1
+  testMoveSpeed: 20
 --- !u!120 &2039963498
 LineRenderer:
   serializedVersion: 2
