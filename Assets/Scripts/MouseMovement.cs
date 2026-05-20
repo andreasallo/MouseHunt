@@ -9,24 +9,29 @@ public class MouseMovement : MonoBehaviour
     public float moveSpeed = 2.5f;
 
     [Header("Obstacle Detection")]
-    public float rayDistance = 2.5f;
-    public float castRadius = 0.5f;
+    public float rayDistance = 2f;
+    public float castRadius = 0.35f;
     public LayerMask obstacleLayer;
 
     [Header("Bounce Settings")]
-    public float bounceAngle = 45f;
-    public float pushAwayDistance = 0.4f;
+    public float bounceAngle = 20f;
+    public float pushAwayDistance = 0.45f;
     public float bounceCooldown = 0.15f;
+
+    [Header("Unstuck System")]
+    public float stuckCheckInterval = 0.8f;
+    public float stuckDistanceThreshold = 0.08f;
+    public float unstuckPushDistance = 0.8f;
+
+    [Header("Audio")]
+    public AudioClip bounceSound;
+    public AudioClip fallSound;
+    public AudioSource musicSource;
 
     [Header("Fall Animation")]
     public float fallDuration = 1f;
     public float spinSpeed = 720f;
     public float fallDistance = 1f;
-
-    [Header("Audio")]
-    public AudioClip fallSound;
-    public AudioSource musicSource;
-    public AudioClip bounceSound;
 
     private Vector3 moveDirection;
     private GameManager gameManager;
@@ -35,6 +40,9 @@ public class MouseMovement : MonoBehaviour
 
     private bool isFalling = false;
     private float lastBounceTime = -999f;
+
+    private Vector3 lastCheckedPosition;
+    private float stuckTimer = 0f;
 
     private void Awake()
     {
@@ -48,19 +56,18 @@ public class MouseMovement : MonoBehaviour
         rb.constraints = RigidbodyConstraints.FreezePositionY |
                          RigidbodyConstraints.FreezeRotationX |
                          RigidbodyConstraints.FreezeRotationZ;
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
-        audioSource = GetComponent<AudioSource>();
 
         ChooseRandomDirection();
 
-        if (musicSource != null)
-        {
-            musicSource.volume = 0.25f;
-        }
+        lastCheckedPosition = transform.position;
+
     }
 
     private void FixedUpdate()
@@ -72,8 +79,16 @@ public class MouseMovement : MonoBehaviour
         }
 
         CheckForObstacle();
+        MoveMouse();
+        CheckIfStuck();
+    }
 
-        rb.linearVelocity = moveDirection * moveSpeed;
+    private void MoveMouse()
+    {
+        Vector3 velocity = moveDirection * moveSpeed;
+        velocity.y = 0f;
+
+        rb.linearVelocity = velocity;
 
         if (moveDirection != Vector3.zero)
         {
@@ -155,44 +170,72 @@ public class MouseMovement : MonoBehaviour
         }
     }
 
-    private void Bounce(Vector3 normal)
+    private void Bounce(Vector3 obstacleNormal)
     {
-
         lastBounceTime = Time.time;
 
-        if (bounceSound != null && audioSource != null)
-        {
-            audioSource.PlayOneShot(bounceSound, 0.5f);
-        }
+        PlayBounceSound();
 
-       
-        normal.y = 0f;
+        obstacleNormal.y = 0f;
 
-        if (normal == Vector3.zero)
+        if (obstacleNormal == Vector3.zero)
         {
             ChooseRandomDirection();
             return;
         }
 
-        normal.Normalize();
+        obstacleNormal.Normalize();
 
-        Vector3 reflectedDirection = Vector3.Reflect(moveDirection, normal);
+        Vector3 reflectedDirection = Vector3.Reflect(moveDirection, obstacleNormal);
         reflectedDirection.y = 0f;
 
         if (reflectedDirection == Vector3.zero)
         {
-            reflectedDirection = normal;
+            reflectedDirection = obstacleNormal;
         }
 
         reflectedDirection.Normalize();
 
         int randomSide = Random.Range(0, 2) == 0 ? -1 : 1;
+        reflectedDirection = Quaternion.Euler(0f, bounceAngle * randomSide, 0f) * reflectedDirection;
 
-        moveDirection = Quaternion.Euler(0f, bounceAngle * randomSide, 0f) * reflectedDirection;
-        moveDirection.Normalize();
+        moveDirection = reflectedDirection.normalized;
 
-        rb.position += normal * pushAwayDistance;
+        rb.position += obstacleNormal * pushAwayDistance;
         rb.linearVelocity = moveDirection * moveSpeed;
+    }
+
+    private void PlayBounceSound()
+    {
+        if (bounceSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(bounceSound, 0.5f);
+        }
+    }
+
+    private void CheckIfStuck()
+    {
+        stuckTimer += Time.fixedDeltaTime;
+
+        if (stuckTimer < stuckCheckInterval)
+        {
+            return;
+        }
+
+        float movedDistance = Vector3.Distance(transform.position, lastCheckedPosition);
+
+        if (movedDistance < stuckDistanceThreshold)
+        {
+            Debug.Log("Mouse was stuck. Forcing new direction.");
+
+            ChooseRandomDirection();
+
+            rb.position += moveDirection * unstuckPushDistance;
+            rb.linearVelocity = moveDirection * moveSpeed;
+        }
+
+        lastCheckedPosition = transform.position;
+        stuckTimer = 0f;
     }
 
     private void ChooseRandomDirection()
@@ -217,6 +260,8 @@ public class MouseMovement : MonoBehaviour
                 moveDirection = Vector3.right;
                 break;
         }
+
+        moveDirection.Normalize();
     }
 
     private void OnTriggerEnter(Collider other)
