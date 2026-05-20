@@ -26,6 +26,7 @@ public class MouseMovement : MonoBehaviour
     [Header("Audio")]
     public AudioClip fallSound;
     public AudioSource musicSource;
+    public AudioClip bounceSound;
 
     private Vector3 moveDirection;
     private GameManager gameManager;
@@ -156,8 +157,15 @@ public class MouseMovement : MonoBehaviour
 
     private void Bounce(Vector3 normal)
     {
+
         lastBounceTime = Time.time;
 
+        if (bounceSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(bounceSound, 0.5f);
+        }
+
+       
         normal.y = 0f;
 
         if (normal == Vector3.zero)
