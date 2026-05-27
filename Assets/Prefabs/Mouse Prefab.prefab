@@ -70,8 +70,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 25
-  rayDistance: 1.5
-  castRadius: 0.3
+  rayDistance: 0.7
+  castRadius: 0.15
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -80,7 +80,7 @@ MonoBehaviour:
   bounceCooldown: 0.15
   stuckCheckInterval: 0.8
   stuckDistanceThreshold: 0.08
-  unstuckPushDistance: 0.8
+  unstuckPushDistance: 1
   bounceSound: {fileID: 8300000, guid: 09009a4833faadf4398110545dac168e, type: 3}
   fallSound: {fileID: 8300000, guid: 3d2cd915db40ee74aad474174eb2bcce, type: 3}
   musicSource: {fileID: 0}

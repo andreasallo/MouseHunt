@@ -12,10 +12,10 @@ public class MouseSpawner : MonoBehaviour
     [Header("Spawn Settings")]
     [SerializeField] private int maxMiceAlive = 3;
     [SerializeField] private float spawnInterval = 5f;
-    [SerializeField] private bool spawnOnStart = true;
+    [SerializeField] private bool spawnOnStart = false;
 
     [Header("Difficulty Scaling")]
-    [SerializeField] private bool increaseDifficultyOverTime = true;
+    [SerializeField] private bool increaseDifficultyOverTime = false;
     [SerializeField] private float difficultyIncreaseInterval = 20f;
     [SerializeField] private int maxMiceLimit = 8;
     [SerializeField] private float minimumSpawnInterval = 1.5f;
@@ -24,6 +24,7 @@ public class MouseSpawner : MonoBehaviour
 
     private float spawnTimer;
     private float difficultyTimer;
+    private float currentMouseSpeed = 2.5f;
 
     private void Start()
     {
@@ -32,7 +33,7 @@ public class MouseSpawner : MonoBehaviour
 
         if (spawnOnStart)
         {
-            SpawnMouse();
+            SpawnStartingMice(1);
         }
     }
 
@@ -86,7 +87,26 @@ public class MouseSpawner : MonoBehaviour
             spawnPoint.rotation
         );
 
+        MouseMovement mouseMovement = newMouse.GetComponent<MouseMovement>();
+
+        if (mouseMovement != null)
+        {
+            mouseMovement.moveSpeed = currentMouseSpeed;
+        }
+        else
+        {
+            Debug.LogWarning("MouseSpawner: Spawned mouse does not have MouseMovement script.");
+        }
+
         aliveMice.Add(newMouse);
+    }
+
+    private void SpawnStartingMice(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            SpawnMouse();
+        }
     }
 
     private void RemoveDestroyedMice()
@@ -97,6 +117,26 @@ public class MouseSpawner : MonoBehaviour
             {
                 aliveMice.RemoveAt(i);
             }
+        }
+    }
+
+    private void ClearExistingMice()
+    {
+        for (int i = aliveMice.Count - 1; i >= 0; i--)
+        {
+            if (aliveMice[i] != null)
+            {
+                Destroy(aliveMice[i]);
+            }
+        }
+
+        aliveMice.Clear();
+
+        GameObject[] sceneMice = GameObject.FindGameObjectsWithTag("Mouse");
+
+        foreach (GameObject mouse in sceneMice)
+        {
+            Destroy(mouse);
         }
     }
 
@@ -121,5 +161,55 @@ public class MouseSpawner : MonoBehaviour
         }
 
         difficultyTimer = difficultyIncreaseInterval;
+    }
+
+    public void ApplyLevelSettings(LevelManager.LevelData levelData)
+    {
+        if (levelData == null)
+        {
+            Debug.LogError("MouseSpawner: Level data is null.");
+            return;
+        }
+
+        if (levelData.levelRoot == null)
+        {
+            Debug.LogError("MouseSpawner: Level root is missing for " + levelData.levelName);
+            return;
+        }
+
+        Transform spawnParent = levelData.levelRoot.transform.Find("MouseSpawnPoints");
+
+        if (spawnParent == null)
+        {
+            Debug.LogError("MouseSpawner: No MouseSpawnPoints found in " + levelData.levelName);
+            return;
+        }
+
+        List<Transform> newSpawnPoints = new List<Transform>();
+
+        foreach (Transform child in spawnParent)
+        {
+            newSpawnPoints.Add(child);
+        }
+
+        spawnPoints = newSpawnPoints.ToArray();
+
+        currentMouseSpeed = levelData.mouseSpeed;
+
+        maxMiceAlive = levelData.maxMice;
+        maxMiceLimit = levelData.maxMice;
+
+        spawnInterval = levelData.spawnInterval;
+        spawnTimer = spawnInterval;
+
+        increaseDifficultyOverTime = false;
+
+        ClearExistingMice();
+        SpawnStartingMice(levelData.startingMice);
+    }
+
+    public void ClearAllMice()
+    {
+        ClearExistingMice();
     }
 }
