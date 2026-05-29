@@ -171,29 +171,6 @@ public class MouseSpawner : MonoBehaviour
             return;
         }
 
-        if (levelData.levelRoot == null)
-        {
-            Debug.LogError("MouseSpawner: Level root is missing for " + levelData.levelName);
-            return;
-        }
-
-        Transform spawnParent = levelData.levelRoot.transform.Find("MouseSpawnPoints");
-
-        if (spawnParent == null)
-        {
-            Debug.LogError("MouseSpawner: No MouseSpawnPoints found in " + levelData.levelName);
-            return;
-        }
-
-        List<Transform> newSpawnPoints = new List<Transform>();
-
-        foreach (Transform child in spawnParent)
-        {
-            newSpawnPoints.Add(child);
-        }
-
-        spawnPoints = newSpawnPoints.ToArray();
-
         currentMouseSpeed = levelData.mouseSpeed;
 
         maxMiceAlive = levelData.maxMice;
@@ -206,6 +183,8 @@ public class MouseSpawner : MonoBehaviour
 
         ClearExistingMice();
         SpawnStartingMice(levelData.startingMice);
+
+        Debug.Log("MouseSpawner applied settings for: " + levelData.levelName);
     }
 
     public void ClearAllMice()
