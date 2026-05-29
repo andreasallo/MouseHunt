@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 
 public class GameManager : MonoBehaviour
@@ -47,12 +47,12 @@ public class GameManager : MonoBehaviour
 
     void UpdateScoreUI()
     {
-        scoreText.text = "Mice captured: " + score;
+        scoreText.text = score.ToString();
     }
 
     void UpdateTimerUI()
     {
-        timerText.text = "Time: " + Mathf.CeilToInt(timeRemaining);
+        timerText.text = Mathf.CeilToInt(timeRemaining).ToString();
     }
 
     void EndGame()

@@ -40,11 +40,9 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         DeactivateAllLevels();
+        LoadLevel(GameSettings.selectedLevel);
 
-        if (loadLevelOnStart)
-        {
-            LoadLevel(startLevelIndex);
-        }
+
     }
 
     private void Update()
