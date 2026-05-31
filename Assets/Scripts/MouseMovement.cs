@@ -34,7 +34,7 @@ public class MouseMovement : MonoBehaviour
     public float fallDistance = 1f;
 
     private Vector3 moveDirection;
-    private GameManager gameManager;
+    private LevelManager levelManager;
     private AudioSource audioSource;
     private Rigidbody rb;
 
@@ -62,12 +62,16 @@ public class MouseMovement : MonoBehaviour
 
     private void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
+        levelManager = FindFirstObjectByType<LevelManager>();
+
+        if (levelManager == null)
+        {
+            Debug.LogWarning("MouseMovement: No LevelManager found in scene.");
+        }
 
         ChooseRandomDirection();
 
         lastCheckedPosition = transform.position;
-
     }
 
     private void FixedUpdate()
@@ -275,9 +279,13 @@ public class MouseMovement : MonoBehaviour
         {
             Debug.Log("Mouse fell into the hole!");
 
-            if (gameManager != null)
+            if (levelManager != null)
             {
-                gameManager.AddPoint();
+                levelManager.RegisterMouseCaptured(transform.position);
+            }
+            else
+            {
+                Debug.LogWarning("MouseMovement: Cannot register capture because LevelManager was not found.");
             }
 
             StartCoroutine(FallIntoHole(other.transform.position));
