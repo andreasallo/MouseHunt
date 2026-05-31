@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Game Settings")]
     public float gameDuration = 60f;
+
+    [Header("Scenes")]
+    [SerializeField] private string endSceneName = "EndScene";
 
     private int score = 0;
     private float timeRemaining;
@@ -31,7 +35,9 @@ public class GameManager : MonoBehaviour
         if (timeRemaining <= 0f)
         {
             timeRemaining = 0f;
+            UpdateTimerUI();
             EndGame();
+            return;
         }
 
         UpdateTimerUI();
@@ -58,8 +64,13 @@ public class GameManager : MonoBehaviour
     void EndGame()
     {
         gameEnded = true;
-        Time.timeScale = 0f;
+
+        PlayerPrefs.SetInt("FinalScore", score);
+        PlayerPrefs.Save();
 
         Debug.Log("Game Over! Final score: " + score);
+
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(endSceneName);
     }
 }

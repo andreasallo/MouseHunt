@@ -2738,7 +2738,7 @@ Transform:
   m_GameObject: {fileID: 872632626}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: -0.5, z: 2.2}
+  m_LocalPosition: {x: -0, y: -0.5, z: 4.2}
   m_LocalScale: {x: 40.67, y: 4.4, z: 11.03}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3034,7 +3034,7 @@ Transform:
   m_GameObject: {fileID: 930274616}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: -0.5, z: -30.9}
+  m_LocalPosition: {x: -0, y: -0.5, z: -28.9}
   m_LocalScale: {x: 40.67, y: 4.4, z: 11.03}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3327,7 +3327,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: eb72730012749124787472dc80385908, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -30.7
+      value: -35.9
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: eb72730012749124787472dc80385908, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3753,7 +3753,7 @@ Transform:
   m_GameObject: {fileID: 1133991544}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: -0.5, z: -14.5}
+  m_LocalPosition: {x: -0, y: -0.5, z: -12.5}
   m_LocalScale: {x: 40.67, y: 4.4, z: 11.03}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5550,8 +5550,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 70
-  m_fontSizeBase: 70
+  m_fontSize: 73
+  m_fontSizeBase: 73
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -5650,7 +5650,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1679151740}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: -41.7}
+  m_LocalPosition: {x: 0, y: 0, z: -40.7}
   m_LocalScale: {x: 1.3271999, y: 1.3272003, z: 1.3272003}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -7421,7 +7421,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TrackingManager
   calibrationUI: {fileID: 1154398784}
   trackingInterface: {fileID: 1154398778}
-  enableTracking: 1
+  enableTracking: 0
   numberOfPlayers: 2
   numberOfBaseStations: 4
   enableRotation: 1
@@ -7457,7 +7457,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: eb72730012749124787472dc80385908, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -33.4
+      value: -35.2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: eb72730012749124787472dc80385908, type: 3}
       propertyPath: m_LocalPosition.y
@@ -7465,7 +7465,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: eb72730012749124787472dc80385908, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -30.7
+      value: -36.1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: eb72730012749124787472dc80385908, type: 3}
       propertyPath: m_LocalRotation.w
