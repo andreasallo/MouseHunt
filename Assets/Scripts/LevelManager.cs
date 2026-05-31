@@ -201,7 +201,8 @@ public class LevelManager : MonoBehaviour
         }
 
         gameEnded = true;
-
+        PlayerPrefs.SetInt("FinalScore", capturedMice);
+        PlayerPrefs.Save();
         Debug.Log("You win!");
 
         Time.timeScale = 1f;
@@ -216,7 +217,8 @@ public class LevelManager : MonoBehaviour
         }
 
         gameEnded = true;
-
+        PlayerPrefs.SetInt("FinalScore", capturedMice);
+        PlayerPrefs.Save();
         Debug.Log("Time ran out. You lose.");
 
         Time.timeScale = 1f;
