@@ -6,28 +6,28 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
+    path: Assets/_Project/Scenes/MainMenu.unity
     guid: 817576f175a7e524296c48accec0d596
   - enabled: 1
-    path: Assets/Scenes/EasyScene.unity
+    path: Assets/_Project/Scenes/EasyScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Scenes/MediumScene.unity
+    path: Assets/_Project/Scenes/MediumScene.unity
     guid: 5fe38053bef1e4e949771839a0767500
   - enabled: 1
-    path: Assets/Scenes/HardScene.unity
+    path: Assets/_Project/Scenes/HardScene.unity
     guid: 7c576fd970d3440afa63fd64db8c73d5
   - enabled: 0
     path: Assets/Scenes/EndScene.unity
     guid: 036b981fdee0b774db3ea6785050d902
   - enabled: 1
-    path: Assets/Scenes/WinScene.unity
+    path: Assets/_Project/Scenes/WinScene.unity
     guid: 79af2152d56dd034da6d5f8b3a15cde1
   - enabled: 1
-    path: Assets/Scenes/LoseScene.unity
+    path: Assets/_Project/Scenes/LoseScene.unity
     guid: 62c835e74f809cc408ec46b57167daaf
   - enabled: 1
-    path: Assets/Scenes/HowToPlay.unity
+    path: Assets/_Project/Scenes/HowToPlay.unity
     guid: 4c489aa5bbf41ab4e9e3eec76653abae
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
