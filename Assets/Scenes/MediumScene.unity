@@ -3085,7 +3085,7 @@ MonoBehaviour:
   colliderThickness: 1
   obstacleLayerName: Obstacle
   clearOldLineWhenStartingNewLine: 1
-  keyboardTestMode: 0
+  keyboardTestMode: 1
   testMoveSpeed: 20
 --- !u!1 &940201294
 GameObject:
@@ -7512,7 +7512,7 @@ MonoBehaviour:
   colliderThickness: 1
   obstacleLayerName: Obstacle
   clearOldLineWhenStartingNewLine: 1
-  keyboardTestMode: 0
+  keyboardTestMode: 1
   testMoveSpeed: 20
 --- !u!120 &2039963498
 LineRenderer:
@@ -7667,7 +7667,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TrackingManager
   calibrationUI: {fileID: 1154398784}
   trackingInterface: {fileID: 1154398778}
-  enableTracking: 1
+  enableTracking: 0
   numberOfPlayers: 2
   numberOfBaseStations: 4
   enableRotation: 1
