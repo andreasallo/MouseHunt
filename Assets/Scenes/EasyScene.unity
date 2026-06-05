@@ -2985,7 +2985,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 931479201}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -849867405023671905, guid: b69ab7dc4a09f094885bf950a65c44c3, type: 3}
 --- !u!114 &931479206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3124,12 +3124,12 @@ MonoBehaviour:
   lineHeightOffset: 0.15
   upsideDownThreshold: 0.7
   lineWidth: 1
-  lineMaterial: {fileID: 2100000, guid: 10edb8367cef642049c7cb3b0ed5387d, type: 2}
+  lineMaterial: {fileID: 2100000, guid: 54c8451b55ffecb48864cfb6ba684d60, type: 2}
   colliderHeight: 3
   colliderThickness: 1
   obstacleLayerName: Obstacle
   clearOldLineWhenStartingNewLine: 1
-  keyboardTestMode: 1
+  keyboardTestMode: 0
   testMoveSpeed: 20
 --- !u!1 &954029150
 GameObject:
@@ -3180,8 +3180,8 @@ MonoBehaviour:
     mouseSpeed: 20
     startingMice: 1
     maxMice: 3
-    spawnInterval: 10
-    capturesToWin: 3
+    spawnInterval: 7
+    capturesToWin: 5
     levelTime: 60
     lineMaxLength: 2.5
     lineLifetime: 6
@@ -7728,7 +7728,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2ccfd250a9352a945bdacf9dc2aa4a75, type: 2}
+  - {fileID: 2100000, guid: fc528ea684425d645b56f483c6a7730f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7757,7 +7757,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2039963491}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 5275773004055656219, guid: a1845977fba8a7a4aa1163544f9b72cc, type: 3}
 --- !u!114 &2039963496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7789,12 +7789,12 @@ MonoBehaviour:
   lineHeightOffset: 0.15
   upsideDownThreshold: 0.7
   lineWidth: 1
-  lineMaterial: {fileID: 2100000, guid: 10edb8367cef642049c7cb3b0ed5387d, type: 2}
+  lineMaterial: {fileID: 2100000, guid: 20893d5872b396849be6d600f7d2d333, type: 2}
   colliderHeight: 3
   colliderThickness: 1
   obstacleLayerName: Obstacle
   clearOldLineWhenStartingNewLine: 1
-  keyboardTestMode: 1
+  keyboardTestMode: 0
   testMoveSpeed: 20
 --- !u!120 &2039963498
 LineRenderer:
@@ -7949,11 +7949,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TrackingManager
   calibrationUI: {fileID: 1154398784}
   trackingInterface: {fileID: 1154398778}
-  enableTracking: 0
+  enableTracking: 1
   numberOfPlayers: 2
   numberOfBaseStations: 4
   enableRotation: 1
-  enableYAxis: 1
+  enableYAxis: 0
   virtualWorldSpace: {x: 100, y: 1, z: 100}
   players:
   - {fileID: 931479201}
